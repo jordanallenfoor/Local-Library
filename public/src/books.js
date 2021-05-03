@@ -10,13 +10,14 @@ function findBookById(books, id) {
   let result = books.find((book) => book.id === id);
   return result;
 }
+function isBookBorrowed(book) {
+  return book.borrows.some((borrow) => !borrow.returned);
+}
 
 function partitionBooksByBorrowedStatus(books) {
-  let booksOut = books.filter((book) => book.borrows[0].returned === false);
-  let booksIn = books.filter((book) => book.borrows[0].returned === true);
-  let borrowedStats = [booksOut, booksIn];
-
-  return borrowedStats;
+  let borrowedBooks = books.filter((book) => isBookBorrowed(book));
+  let returnedBooks = books.filter((book) => !isBookBorrowed(book));
+  return [borrowedBooks, returnedBooks];
 }
 
 function getBorrowersForBook(book, accounts) {
